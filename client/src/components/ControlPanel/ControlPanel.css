@@ -1,0 +1,9 @@
+.control-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 200px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 20px;
+}
