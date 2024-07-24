@@ -2,7 +2,7 @@
 import React from 'react';
 import { auth, db } from '../../firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, updateDoc, getDocs, doc } from 'firebase/firestore';
 import './ControlPanel.css';
 
 const ControlPanel = () => {
@@ -29,10 +29,27 @@ const ControlPanel = () => {
     }
   };
 
+  const handleClearStars = async () => {
+    try {
+      const starsCollection = collection(db, 'stars');
+      const starsSnapshot = await getDocs(starsCollection);
+      const batch = db.batch();
+      starsSnapshot.forEach(doc => {
+        const starRef = doc.ref;
+        batch.update(starRef, { name: '' });
+      });
+      await batch.commit();
+      alert('Все звезды очищены.');
+    } catch (error) {
+      console.error("Ошибка при очистке звёзд: ", error);
+    }
+  };
+
   return (
     <div className="control-panel">
       <h2>Панель управления</h2>
       <button onClick={handleAddStar}>Добавить звезду</button>
+      <button onClick={handleClearStars}>Очистить звёзды</button>
       <button onClick={handleLogout}>Выйти</button>
     </div>
   );
